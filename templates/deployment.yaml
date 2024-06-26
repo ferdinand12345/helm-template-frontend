@@ -18,7 +18,7 @@ spec:
         - name: frontend
           image: image-registry.openshift-image-registry.svc:5000/project-testing/sapura-app:1.2
           env:
-            - name: TENANT
+            - name: REACT_APP_API_TENANT
               value: "iZeno Partner-DEV"
           resources:
             requests:
