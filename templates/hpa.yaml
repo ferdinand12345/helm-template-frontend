@@ -2,11 +2,11 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "helm-chart.fullname" . }}
+  name: {{ include "helm-template-frontend.fullname" . }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1 
-    name: {{ include "helm-chart.fullname" . }}
+    name: {{ include "helm-template-frontend.fullname" . }}
     kind: Deployment
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
