@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-appversion: 1.9
+appversion: "1.9"
 replicaCount: 1
 name: ""
 image:
