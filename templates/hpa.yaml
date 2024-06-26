@@ -1,26 +1,19 @@
-{{- if .Values.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "helm-template-frontend.fullname" . }}
+  name: sapura-hpa
+  namespace: project-testing
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1 
-    name: {{ include "helm-template-frontend.fullname" . }}
+    apiVersion: apps/v1
     kind: Deployment
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+    name: sapura-app
+  minReplicas: 1
+  maxReplicas: 3
   metrics:
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization 
-        averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
-{{- end }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          averageUtilization: 50
+          type: Utilization
