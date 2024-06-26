@@ -17,6 +17,9 @@ spec:
       containers:
         - name: frontend
           image: image-registry.openshift-image-registry.svc:5000/project-testing/sapura-app:1.2
+		  env:
+			- name: TENANT
+			  value: "iZeno Partner-DEV"
           resources:
             requests:
               cpu: "250m"
