@@ -16,7 +16,7 @@ spec:
       serviceAccountName: frontend-api
       containers:
         - name: frontend
-          image: image-registry.openshift-image-registry.svc:5000/project-production/sapura-app:1.7
+          image: image-registry.openshift-image-registry.svc:5000/project-production/sapura-app:2.0
           env:
             - name: REACT_APP_API_TENANT
               value: "iZeno Partner-PROD"
