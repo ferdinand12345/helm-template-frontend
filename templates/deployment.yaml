@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sapura-app
+  namespace: project-production
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      serviceAccountName: frontend-api
+      containers:
+        - name: frontend
+          image: image-registry.openshift-image-registry.svc:5000/project-production/sapura-app:1.1
+          ports:
+            - containerPort: 3000
