@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ''
-  namespace: project-testing
-data:
-  - TENANT: "Tenant : iZeno Partner-DEV"
-binaryData: {}
-immutable: false
