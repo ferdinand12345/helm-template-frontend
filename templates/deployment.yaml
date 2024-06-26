@@ -16,6 +16,6 @@ spec:
       serviceAccountName: frontend-api
       containers:
         - name: frontend
-          image: image-registry.openshift-image-registry.svc:5000/project-production/sapura-app:1.1
+          image: image-registry.openshift-image-registry.svc:5000/project-production/sapura-app:1.2
           ports:
             - containerPort: 3000
