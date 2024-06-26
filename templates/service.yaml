@@ -1,15 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "helm-template-frontend.fullname" . }}
-  labels:
-    {{- include "helm-template-frontend.labels" . | nindent 4 }}
+  name: sapura-app-service
+  namespace: project-testing
 spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
   selector:
-    {{- include "helm-template-frontend.selectorLabels" . | nindent 4 }}
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
