@@ -1,16 +1,13 @@
-{{- if .Values.route.enabled }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ include "helm-template-frontend.fullname" . }}
-  labels:
-    app: {{ include "helm-template-frontend.name" . }}
+  name: sapura-app-route
+  namespace: project-production
 spec:
-  host: {{ .Values.route.hostname }}
+  host: production-sapura-app-route.apps.cluster-bp2lg.bp2lg.sandbox1562.opentlc.com
   to:
     kind: Service
-    name: {{ include "helm-template-frontend.fullname" . }}
+    name: sapura-app-service
   port:
-    targetPort: http
+    targetPort: 3000
   wildcardPolicy: None
-{{- end }}
