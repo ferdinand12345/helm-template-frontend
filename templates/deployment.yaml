@@ -16,6 +16,16 @@ spec:
       serviceAccountName: frontend-api
       containers:
         - name: frontend
-          image: image-registry.openshift-image-registry.svc:5000/project-production/sapura-app:1.2
+          image: image-registry.openshift-image-registry.svc:5000/project-testing/sapura-app:1.4
+          env:
+            - name: REACT_APP_API_TENANT
+              value: "iZeno Partner-PROD"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "1000Mi"
+            limits:
+              cpu: "500m"
+              memory: "2000Mi"
           ports:
             - containerPort: 3000
