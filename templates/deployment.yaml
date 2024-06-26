@@ -1,59 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm-template-frontend.fullname" . }}
-  labels:
-    {{- include "helm-template-frontend.labels" . | nindent 4 }}
+  name: sapura-app
+  namespace: project-testing
 spec:
-{{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-{{- end }}
   selector:
     matchLabels:
-      {{- include "helm-template-frontend.selectorLabels" . | nindent 6 }}
+      app: frontend
+  replicas: 1
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
       labels:
-        {{- include "helm-template-frontend.selectorLabels" . | nindent 8 }}
-        maistra.io/expose-route: 'true'
+        app: frontend
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: frontend-api
       containers:
-        - name: {{ include "helm-template-frontend.fullname" . }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}/{{ .Values.namespace }}/{{ include "helm-template-frontend.fullname" . }}:{{ .Values.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 3000
-              protocol: TCP
+        - name: frontend
+          image: image-registry.openshift-image-registry.svc:5000/project-testing/sapura-app:1.3
+          env:
+            - name: REACT_APP_API_TENANT
+              value: "iZeno Partner-DEV"
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.configmap.enabled }}
-          envFrom:
-          - configMapRef:
-              name: {{ include "helm-template-frontend.fullname" . }}-configmap
-          {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-
+            requests:
+              cpu: "250m"
+              memory: "1000Mi"
+            limits:
+              cpu: "500m"
+              memory: "2000Mi"
+          ports:
+            - containerPort: 3000
