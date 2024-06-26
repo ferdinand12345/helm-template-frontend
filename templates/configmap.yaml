@@ -1,0 +1,10 @@
+{{- if .Values.configmap.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm-template-frontend.fullname" . }}-configmap
+  labels:
+    {{- include "helm-template-frontend.labels" . | nindent 4 }}
+data:
+    REACT_APP_API_TENANT: {{ .Values.configmap.tenant }}
+{{- end }}

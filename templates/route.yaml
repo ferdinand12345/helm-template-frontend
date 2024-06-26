@@ -1,0 +1,16 @@
+{{- if .Values.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "helm-template-frontend.fullname" . }}
+  labels:
+    app: {{ include "helm-template-frontend.name" . }}
+spec:
+  host: {{ .Values.route.hostname }}
+  to:
+    kind: Service
+    name: {{ include "helm-template-frontend.fullname" . }}
+  port:
+    targetPort: http
+  wildcardPolicy: None
+{{- end }}

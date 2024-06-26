@@ -1,20 +1,39 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+<<<<<<< HEAD
   name: sapura-app
   namespace: project-testing
+=======
+  name: {{ include "helm-template-frontend.fullname" . }}
+  labels:
+    {{- include "helm-template-frontend.labels" . | nindent 4 }}
+>>>>>>> origin
 spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
   selector:
     matchLabels:
-      app: frontend
-  replicas: 1
+      {{- include "helm-template-frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
       labels:
-        app: frontend
+        {{- include "helm-template-frontend.selectorLabels" . | nindent 8 }}
+        maistra.io/expose-route: 'true'
     spec:
-      serviceAccountName: frontend-api
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
+<<<<<<< HEAD
         - name: frontend
           image: image-registry.openshift-image-registry.svc:5000/project-testing/sapura-app:1.3
           env:
@@ -27,5 +46,34 @@ spec:
             limits:
               cpu: "500m"
               memory: "2000Mi"
+=======
+        - name: {{ include "helm-template-frontend.fullname" . }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}/{{ .Values.namespace }}/{{ include "helm-template-frontend.fullname" . }}:{{ .Values.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+>>>>>>> origin
           ports:
-            - containerPort: 3000
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.configmap.enabled }}
+          envFrom:
+          - configMapRef:
+              name: {{ include "helm-template-frontend.fullname" . }}-configmap
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
